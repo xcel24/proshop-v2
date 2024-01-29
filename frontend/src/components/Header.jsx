@@ -1,22 +1,36 @@
 import { Container, Nav, Navbar } from 'react-bootstrap'
 import { FaShoppingCart, FaUser } from 'react-icons/fa'
+// it is used to add routes for react-bootstrap elements
+import { LinkContainer } from 'react-router-bootstrap'
+import logo from '../assets/logo.png'
 
 const Header = () => {
   return (
     <header>
       <Navbar expand='md' bg='dark' variant='dark' collapseOnSelect>
         <Container>
-          <Navbar.Brand href='/'>ProShop</Navbar.Brand>
+          <LinkContainer to='/'>
+            <Navbar.Brand>
+              <img src={logo} alt='ProShop' />
+              ProShop
+            </Navbar.Brand>
+          </LinkContainer>
+
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>
-              <Nav.Link href='/cart'>
-                <FaShoppingCart /> Cart
-              </Nav.Link>
-              <Nav.Link href='/login'>
-                <FaUser />
-                Sign In
-              </Nav.Link>
+              <LinkContainer to='/cart'>
+                <Nav.Link>
+                  <FaShoppingCart /> Cart
+                </Nav.Link>
+              </LinkContainer>
+
+              <LinkContainer to='/login'>
+                <Nav.Link>
+                  <FaUser />
+                  Sign In
+                </Nav.Link>
+              </LinkContainer>
             </Nav>
           </Navbar.Collapse>
         </Container>
