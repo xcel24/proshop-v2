@@ -9,18 +9,24 @@ const Product = ({ product }) => {
         <Card.Img variant='top' src={product.image} />
       </Link>
       <Card.Body>
-        <Link to={`/product/${product._id}`}>
-          <Card.Title as={'div'}>
+        <Card.Title as={'div'}>
+          <Link
+            to={`/product/${product._id}`}
+            style={{ textDecoration: 'none' }}
+          >
             <strong>{product.name}</strong>
-          </Card.Title>
-        </Link>
+          </Link>
+        </Card.Title>
+
         <Card.Text as={'div'}>
           <Rating
             value={product.rating}
             text={`${product.numReviews} reviews`}
           />
         </Card.Text>
-        <Card.Text as={'h3'}>${product.price}</Card.Text>
+        <Card.Text as={'h3'} className='mt-2'>
+          ${product.price}
+        </Card.Text>
       </Card.Body>
     </Card>
   )
