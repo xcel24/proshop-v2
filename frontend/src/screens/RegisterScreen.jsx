@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import FormContainer from '../components/FormContainer'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import Loader from '../components/Loader'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setCredentials } from '../slices/authSlice'
 import { useRegisterMutation } from '../slices/usersApiSlice'
 
@@ -14,20 +14,37 @@ const RegisterScreen = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const [register, { isLoading }] = useRegisterMutation()
 
+  const { userInfo } = useSelector((state) => state.auth)
+
+  const { search } = useLocation()
+  const sp = new URLSearchParams(search)
+  const redirect = sp.get('redirect') || '/'
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect)
+    }
+  }, [navigate, redirect, userInfo])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     try {
-      const res = await register({ name, email, password }).unwrap()
-      dispatch(setCredentials({ ...res }))
+      if (password === confirmPassword) {
+        const res = await register({ name, email, password }).unwrap()
+        dispatch(setCredentials({ ...res }))
 
-      navigate('/')
+        navigate('/')
+      } else {
+        toast.error('Passwords do not match')
+      }
     } catch (error) {
       toast.error(error?.data?.message || error.error)
     }
@@ -68,6 +85,15 @@ const RegisterScreen = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
+        <Form.Group className='my-3' controlId='confirmPassword'>
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control
+            type='password'
+            placeholder='Confirm - Password'
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </Form.Group>
         <Button
           variant='primary'
           type='submit'
@@ -80,7 +106,10 @@ const RegisterScreen = () => {
       </Form>
       <Row className='py-3'>
         <Col>
-          Already Registered? <Link to='/login'>Sign In</Link>
+          Already Registered?{' '}
+          <Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>
+            Sign In
+          </Link>
         </Col>
       </Row>
     </FormContainer>
