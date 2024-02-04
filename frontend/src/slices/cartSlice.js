@@ -6,6 +6,8 @@ const initialState = localStorage.getItem('cart')
   ? JSON.parse(localStorage.getItem('cart'))
   : { cartItems: [] }
 
+const nullState = { cartItems: [] }
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -33,9 +35,12 @@ const cartSlice = createSlice({
 
       return updateCart(state)
     },
+    resetCart: (state) => {
+      return nullState
+    },
   },
 })
 
-export const { addToCart, removeFromCart } = cartSlice.actions
+export const { addToCart, removeFromCart, resetCart } = cartSlice.actions
 
 export default cartSlice.reducer
