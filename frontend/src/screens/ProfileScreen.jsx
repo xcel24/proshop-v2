@@ -133,20 +133,20 @@ const ProfileScreen = () => {
                   <td>&#8377;{order.price}</td>
                   <td>
                     {orders.isPaid ? (
-                      orders.paidAt
+                      orders.paidAt.substr(0, 10)
                     ) : (
                       <FaTimes style={{ color: 'red' }} />
                     )}
                   </td>
                   <td>
                     {orders.isDelivered ? (
-                      orders.deliveredAt
+                      orders.deliveredAt.substr(0, 10)
                     ) : (
                       <FaTimes style={{ color: 'red' }} />
                     )}
                   </td>
                   <td>
-                    <LinkContainer to={`/order/${order._id}`}>
+                    <LinkContainer to={`/order/${orders._id}`}>
                       <Button variant='light' className='btn-sm'>
                         Details
                       </Button>
