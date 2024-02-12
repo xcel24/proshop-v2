@@ -3,6 +3,7 @@ import { FaEdit, FaTrash } from 'react-icons/fa'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import {
+  useCreateProductMutation,
   useDeleteProductMutation,
   useGetProductsQuery,
 } from '../slices/productsApiSlice'
@@ -11,6 +12,9 @@ import { toast } from 'react-toastify'
 
 const ProductListScreen = () => {
   const { data: products, isLoading, error, refetch } = useGetProductsQuery()
+
+  const [createProduct, { isLoading: createProductLoading }] =
+    useCreateProductMutation()
 
   const [deleteProduct, { isLoading: deleteLoading }] =
     useDeleteProductMutation()
@@ -29,6 +33,16 @@ const ProductListScreen = () => {
     }
   }
 
+  const createProductHandler = async () => {
+    try {
+      await createProduct()
+
+      refetch()
+
+      toast.success('Product Created Successfully')
+    } catch (error) {}
+  }
+
   return (
     <>
       <Row className='align-items-center'>
@@ -36,12 +50,12 @@ const ProductListScreen = () => {
           <h1>Products</h1>
         </Col>
         <Col className='text-end'>
-          <Button className='btn-sm'>
+          <Button className='btn-sm' onClick={createProductHandler}>
             <FaEdit /> Create Product
           </Button>
         </Col>
       </Row>
-      {isLoading || deleteLoading ? (
+      {isLoading || deleteLoading || createProductLoading ? (
         <Loader />
       ) : error ? (
         <Message variant={'danger'}>
