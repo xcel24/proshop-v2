@@ -161,7 +161,7 @@ const OrderScreen = () => {
                         </Col>
                         <Col md={4}>
                           {item.qty} x &#8377;{item.price} = &#8377;
-                          {item.qty * item.price}
+                          {(Number(item.qty) * Number(item.price)).toFixed(2)}
                         </Col>
                       </Row>
                     </ListGroup.Item>
